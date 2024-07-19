@@ -10,7 +10,7 @@ document.getElementById('api-form').addEventListener('submit', async function(e)
         campaignID: '6a0fa162-fb4c-4074-a6d4-402744e3590b',
         country: 'IRAQ',
         countryCode: '+964',
-        phone: phone
+        phone: '+964' + phone // Concatenate country code with user input
     };
 
     try {
@@ -22,8 +22,15 @@ document.getElementById('api-form').addEventListener('submit', async function(e)
             body: JSON.stringify(data)
         });
 
-        const result = await response.json();
-        responseDiv.innerHTML = `Response: ${JSON.stringify(result)}`;
+        // Check for successful response
+        if (response.ok) {
+            const result = await response.json();
+            responseDiv.innerHTML = `Response: ${JSON.stringify(result)}`;
+        } else {
+            const errorMessage = await response.text(); // Get the error message
+            responseDiv.innerHTML = `Error: ${response.status} - ${errorMessage}`; 
+        }
+
     } catch (error) {
         responseDiv.innerHTML = `Error: ${error.message}`;
     }
